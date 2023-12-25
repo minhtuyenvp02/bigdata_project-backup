@@ -1,0 +1,66 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+  kafka11:
+    image: confluentinc/cp-kafka:7.2.1
+    container_name: kafka11
+    ports:
+      - 8097:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:29092,OUTSIDE://localhost:8097
+      KAFKA_LISTENERS: INSIDE://:29092,OUTSIDE://:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_CREATE_TOPICS: stockStreaming
+  kafka12:
+    image: confluentinc/cp-kafka:7.2.1
+    container_name: kafka12
+    ports:
+      - 8098:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:29092,OUTSIDE://localhost:8098
+      KAFKA_LISTENERS: INSIDE://:29092,OUTSIDE://:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+  kafka13:
+    image: confluentinc/cp-kafka:7.2.1
+    container_name: kafka13
+    ports:
+      - 8099:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:29092,OUTSIDE://localhost:8099
+      KAFKA_LISTENERS: INSIDE://:29092,OUTSIDE://:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+
+#  cassandra:
+#    image: cassandra:latest
+#    container_name: cassandra
+#    ports:
+#      - "9042:9042"
+#
+#  kafka_producer:
+#    image: minhtuyenvp02/kafka_producer
+#    container_name: kafka_producer
+#    ports:
+#      - "9999:9999"
+#    environment:
+#      KAFKA_11_HOST: kafka11
+#      KAFKA_12_HOST: kafka12
+#      KAFKA_13_HOST: kafka13
