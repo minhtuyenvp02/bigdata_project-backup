@@ -58,6 +58,7 @@ public class DataToEs {
         Dataset<Row> stocks = df.selectExpr("CAST(value AS STRING)")
                 .select(from_json(col("value"), scm).as("data"))
                 .select("data.*");
+        stocks.dropDuplicates("sym", "crawledTime");
         // DropCol transform
         Dataset<Row> stocks_df = stocks.drop("CWMaturityDate")
                 .drop("CWLastTradingDate")
