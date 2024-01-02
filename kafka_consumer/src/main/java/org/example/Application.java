@@ -7,6 +7,8 @@ import java.util.concurrent.TimeoutException;
 public class Application {
     public static void main(String[] args) throws TimeoutException, StreamingQueryException {
         DataToEs dataToEs = new DataToEs();
-        dataToEs.start();
+        DataToCassandra dataToCassandra = new DataToCassandra();
+        dataToCassandra.start();
+//        dataToEs.start();
     }
 }

@@ -14,6 +14,7 @@ import org.apache.spark.sql.types.StructType;
 import org.example.udf.UserDefineFunction;
 import org.example.ultils.StockCfSchema;
 
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 import static org.apache.spark.sql.functions.*;
@@ -110,6 +111,9 @@ public class DataToEs {
                 .drop("Symbol")
                 .drop("CWListedShare")
         ;
+        // prepared to write data to cassandra
+//        stocks_df_ = stocks_df_.withColumn("id", functions.lit(UUID.randomUUID().toString()));
+
         // Select transform
         Dataset<Row> dfForCompute = stocks_df.select(col("Mã cổ phiếu"), col("Tên Cty"),col("industry"),col("CenterName"),col("Giá mở cửa"), col("Giá khớp lệnh"), col("Tổng khối lượng giao dịch"), col("Tỷ lệ biến động"), col("Vốn hoá thị trường"), col("UpdatedDate"));
         //groupBy + agg

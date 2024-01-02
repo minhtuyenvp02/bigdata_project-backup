@@ -10,6 +10,7 @@ import org.apache.spark.sql.streaming.StreamingQueryException;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
+import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
 import static org.apache.spark.sql.functions.*;
@@ -20,10 +21,10 @@ public class DataToCassandra {
         Logger.getLogger("org.apache.spark.storage").setLevel(Level.ERROR);
 
         SparkConf conf = new SparkConf();
-        conf.setAppName("DataToEs")
+        conf.setAppName("DataToCass")
             .setMaster("local[*]")
-            .set("spark.cassandra.connection.host", "cassandra")
-            .set("spark.cassandra.connection.port", "9042");
+            .set("spark.cassandra.connection.host", "127.0.0.1")
+            .set("spark.cassandra.connection.port", "9043");
 
         SparkSession session = SparkSession.builder()
                 .config(conf)
@@ -44,7 +45,7 @@ public class DataToCassandra {
         Dataset<Row> stocks = df.selectExpr("CAST(value AS STRING)")
                 .select(functions.from_json(functions.col("value"), scm).as("data"))
                 .select("data.*");
-        Dataset<Row> stock_df = stocks.drop("CWMaturityDate")
+        Dataset<Row> stocks_df = stocks.drop("CWMaturityDate")
                 .drop("CWLastTradingDate")
                 .drop("CWExcersisePrice")
                 .drop("CWExerciseRatio")
@@ -59,11 +60,11 @@ public class DataToCassandra {
                 .drop("fBValue")
                 .drop("fSVolume")
                 .drop("fSValue");
-
-        StreamingQuery query = stocks.writeStream()
-                .format("org.apache.spark.sql.cassandra")
-//                .format("console")
-                .outputMode("append")
+        stocks_df = stocks_df.withColumn("id", functions.lit(UUID.randomUUID().toString()));
+        StreamingQuery query = stocks_df.writeStream()
+//                .format("org.apache.spark.sql.cassandra")
+////                .format("console")
+//                .outputMode("append")
                 .foreachBatch((Dataset<Row> writeDF, Long batchId) -> {
                     writeToCassandra(writeDF, session);
                 })
@@ -74,8 +75,8 @@ public class DataToCassandra {
         writeDF.write()
                 .format("org.apache.spark.sql.cassandra")
                 .mode("append")
-                .option("table", "stock_test")
-                .option("keyspace", "spark_stock")
+                .option("table", "stocks")
+                .option("keyspace", "testKeyspace")
                 .save();
     }
 }

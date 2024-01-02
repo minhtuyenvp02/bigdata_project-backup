@@ -7,6 +7,11 @@
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="Cass" />
+      <option name="name" value="Cass" />
+      <option name="url" value="https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="SparkPackagesRepo" />
       <option name="name" value="SparkPackagesRepo" />
       <option name="url" value="https://repos.spark-packages.org" />

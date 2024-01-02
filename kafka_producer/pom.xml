@@ -68,11 +68,6 @@
             <artifactId>spark-cassandra-connector-java_2.11</artifactId>
             <version>${com.datastax.spark.spark-cassandra-connector-java.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgres.version}</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.datastax.spark/spark-cassandra-connector -->
         <dependency>
             <groupId>com.datastax.spark</groupId>
