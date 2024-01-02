@@ -41,16 +41,20 @@ public class StockCrawler {
 
     public void crawlDataAtFirstTime() throws IOException {
         for (String stockType : STOCK_TYPES) {
+            System.out.println(stockType.toString());
            crawlData(stockType.toLowerCase(),kafkaProducer, topicName );
         }
     }
 //
-    public void scheduleDataCrawling() {
+    public void  scheduleDataCrawling() {
         long delay = 5 * 60 * 1000; // 5 minutes
 
         Runnable task = () -> {
             for (String stockType : STOCK_TYPES) {
+                System.out.println(stockType);
                 try {
+                    System.out.println(STOCK_TYPES.length);
+                    System.out.println(stockType.toString());
                     crawlData(stockType.toLowerCase(),kafkaProducer, topicName);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -79,8 +83,8 @@ public class StockCrawler {
         List<IndustryType> typeList = Constant.getListIndustryType();
 //        System.out.println(typeList.toString());
 
-        if ((currentTime.compareTo("09:00") >= 0 && currentTime.compareTo("12:30") <= 0)
-                || (currentTime.compareTo("14:00") >= 0 && currentTime.compareTo("16:30") <= 0)) {
+        if ((currentTime.compareTo("00:00") >= 0 && currentTime.compareTo("12:30") <= 0)
+                || (currentTime.compareTo("12:00") >= 0 && currentTime.compareTo("23:59") <= 0)) {
             System.out.println("Crawling data at " + currentTime);
             String crawledTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             List<String> stockCodes = stockDataFetcher.getStockCode(stockType);

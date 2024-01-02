@@ -107,10 +107,10 @@ public class StockProducer {
 //        }
 
         final int maxRequestsPerSecond = 100;
-        final String topicName = "firstdemo" ;
+        final String topicName = "stockStreaming" ;
         final RateLimiter rateLimiter = RateLimiter.create(maxRequestsPerSecond);
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:8087, localhost:8088, localhost:8089");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:8097, localhost:8098, localhost:8099");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
         props.put(ProducerConfig.LINGER_MS_CONFIG, "20");
